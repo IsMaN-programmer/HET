@@ -1,0 +1,16 @@
+[
+  {
+    "user_id": 1132272833,
+    "account": "1332542",
+    "date": "2025-10-12",
+    "consumption": 12.4,
+    "balance": 9542.42
+  },
+  {
+    "user_id": 1132272833,
+    "account": "1442542",
+    "date": "2025-10-12",
+    "consumption": 12.4,
+    "balance": 9542.42
+  }
+]
