@@ -25,7 +25,6 @@ main_kb = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
-# Состояния и файлы
 user_states = {}
 user_api_keys = {}
 accounts_file = "accounts.json"
@@ -50,13 +49,11 @@ async def ask_api_key(message: types.Message):
 @router.message()
 async def handle_api_or_commands(message: types.Message):
     user_id = message.from_user.id
-    # если ожидаем API ключ
     if user_api_keys.get(user_id) is None:
         api_key = message.text.strip()
         user_api_keys[user_id] = api_key
         await message.answer("✅ API‑ключ сохранён! Теперь можно смотреть баланс и графики.")
         return
-    # если ожидаем лицевой счёт
     if user_states.get(user_id) == "awaiting_account_number":
         account_number = message.text.strip()
         accounts = load_json(accounts_file)
@@ -72,7 +69,6 @@ async def handle_api_or_commands(message: types.Message):
 async def add_account_prompt(message: types.Message):
     await message.answer(TEXTS["add_prompt"])
     user_states[message.from_user.id] = "awaiting_account_number"
-
 @router.message(F.text == "❌ Удалить аккаунт")
 async def show_accounts_for_deletion(message: types.Message):
     user_id = message.from_user.id
@@ -91,7 +87,6 @@ async def delete_selected_account(callback: types.CallbackQuery):
     user_id = callback.from_user.id
     account_number = callback.data.split(":")[1]
     accounts = load_json(accounts_file)
-
     new_accounts = [acc for acc in accounts if not (acc["user_id"] == user_id and acc["account_number"] == account_number)]
     if len(new_accounts) < len(accounts):
         save_json(accounts_file, new_accounts)
@@ -112,7 +107,6 @@ async def show_accounts_for_consumption(message: types.Message):
     user_id = message.from_user.id
     accounts = load_json(accounts_file)
     user_accounts = [acc["account_number"] for acc in accounts if acc["user_id"] == user_id]
-
     if not user_accounts:
         await message.answer(TEXTS["no_accounts"])
         return
